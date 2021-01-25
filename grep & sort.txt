@@ -1,0 +1,155 @@
+//grep
+import java.util.*;
+import java.util.Scanner;
+ 
+public class grep
+{
+        public static void main(String[] args)
+        {
+            System.out.print("Введите текст:");
+            Scanner in = new Scanner(System.in);
+            String Text = new String(in.nextLine());
+            char[] CharText = Text.toCharArray();
+            ArrayList<String> MassString = new ArrayList<>();
+            String str = new String();
+            for(int i = 0; i< CharText.length; i++)
+            {
+                if(CharText[i]=='.'|| CharText[i]=='!'|| CharText[i]=='?')
+                {
+                    str = str+ CharText[i];
+                    MassString.add(str);
+                    str="";
+                }
+                else
+                {
+                    if(CharText[i]==' '&& (CharText[i-1]=='.'|| CharText[i-1]=='!'|| CharText[i-1]=='?'))
+                        i++;
+                    str = str + CharText[i];
+                }
+            }
+            System.out.println("Отфильтрованный текст:");
+            for(String a: MassString)
+            {
+                int counter=0;
+                for(int j =0; j < args.length; j++) {
+                    if (a.toLowerCase().contains(args[j].toLowerCase()))
+                        counter++;
+                }
+ 
+                if(counter==args.length) {
+                    System.out.println(a);
+ 
+                }
+            }
+        }
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//sort
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Scanner;
+ 
+public class Sort {
+    // Вспомогательный класс реализующий удобный формат строк
+    static private class MyString implements Comparable<MyString> {
+        
+        private int sortIndex = -1;
+        private String interString;
+ 
+        MyString(String str, int wordNum) {
+            this.interString = str;
+            this.sortIndex = wordNum;
+        }
+ 
+        public String getStr() {
+            return interString;
+        }
+ 
+        //сортировка без учёта регистра
+        public int compareTo(MyString obj) {
+ 
+            
+            // 1) Сортировка по алфавиту
+            // return interString.toLowerCase().compareTo(arg0.getStr().toLowerCase());
+ 
+            // 2) Сортировка по длинне слов
+            if(sortIndex == -1) return interString.length()-obj.getStr().length();
+ 
+ 
+            // 3)Сортируем строку по sortIndex'му элементу
+            String str1 = null, str2 = null;
+ 
+            try
+            {
+                str1 = interString.split(" ")[sortIndex];
+            }
+            catch (Exception e)
+            {
+                // Если нет нужного слова в 1-й строке то, считаем что 1-е меньше 2-го
+                return -1;
+            }
+            try
+            {
+                str2 = obj.getStr().split(" ")[sortIndex];
+            }
+            catch (Exception e)
+            {
+                // Если нет нужного слова во 2-й строке, то считаем что 2-е меньше 1-го
+                return 1;
+            }
+ 
+            // Если нужные слова "попались", сравниваем их как обычно
+            return str1.compareTo(str2);
+        }
+    }
+ 
+    public static void main(String[] args) {
+        // По умолчанию сортировка по длинне слов
+        int sortIndex = -1;
+ 
+        // Проверяем передан ли аргумент при запуске
+        if(args.length != 0) sortIndex = Integer.valueOf(args[0]);
+ 
+        ArrayList<MyString> sortList = new ArrayList<MyString>();
+ 
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Введите список для сортировки: ");
+ 
+        // Наполнение ArrayList'a объектами класса MyString
+        while(true) {
+            String tempStr = sc.nextLine();
+            if(tempStr.equals("end")) break;
+            sortList.add(new MyString(tempStr, sortIndex));
+        }
+ 
+        Collections.sort(sortList);
+ 
+        Iterator iter = sortList.iterator();
+        System.out.println("\nОтсортированный список: ");
+ 
+        while(iter.hasNext()) {
+            System.out.println( ((MyString) iter.next()).getStr());
+        }
+        sc.close();
+    }
+}
+
+
+
+
+
+
+            
